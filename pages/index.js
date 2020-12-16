@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useContext, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Todo from "../components/Todo";
+import TodoForm from "../components/TodoForm";
 import { TodosContext } from "../contexts/TodosContext";
 import { minifyRecords, table } from "./api/utils/airtable";
 import auth0 from "./api/utils/auth0";
@@ -19,10 +20,17 @@ export default function Home({ initialTodos, user }) {
         <title>Authenticate Todo App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Navbar user={user} />
       <main>
-        <h1>Todo App</h1>
-        {todos && todos.map((todo) => <Todo todo={todo} key={todo.id} />)}
+        <Navbar user={user} />
+        {user && (
+          <>
+            <h1 className="text-2xl text-center mb-4">My Todos</h1>
+            <TodoForm />
+            <ul>
+              {todos && todos.map((todo) => <Todo todo={todo} key={todo.id} />)}
+            </ul>
+          </>
+        )}
       </main>
     </div>
   );

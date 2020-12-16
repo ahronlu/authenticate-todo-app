@@ -1,8 +1,8 @@
 import { createContext, useState } from "react";
 
-export const TodosContext = createContext();
+const TodosContext = createContext();
 
-export const TodosProvider = ({ children }) => {
+const TodosProvider = ({ children }) => {
   const [todos, setTodos] = useState([]);
 
   const refreshTodos = async () => {
@@ -11,32 +11,35 @@ export const TodosProvider = ({ children }) => {
       const latestTodos = await res.json();
       setTodos(latestTodos);
     } catch (err) {
-      console.err(err);
+      console.error(err);
     }
   };
 
-  const addTodo = async (description) => {
+  const addTodo = async (todo) => {
     try {
       const res = await fetch("/api/createTodo", {
         method: "POST",
-        body: JSON.stringify({ description }),
+        body: JSON.stringify({ description: todo }),
         headers: { "Content-Type": "application/json" },
       });
       const newTodo = await res.json();
       setTodos((prevTodos) => {
-        return [newTodo, ...prevTodos];
+        const updatedTodos = [newTodo, ...prevTodos];
+        return updatedTodos;
       });
     } catch (err) {
-      console.err(err);
+      console.error(err);
     }
   };
 
   const updateTodo = async (updatedTodo) => {
     try {
-      const res = await fetch("/api/updateTodo", {
+      await fetch("/api/updateTodo", {
         method: "PUT",
         body: JSON.stringify(updatedTodo),
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+        },
       });
 
       setTodos((prevTodos) => {
@@ -48,14 +51,14 @@ export const TodosProvider = ({ children }) => {
         return existingTodos;
       });
     } catch (err) {
-      console.err(err);
+      console.error(err);
     }
   };
 
   const deleteTodo = async (id) => {
     try {
-      const res = await fetch("/api/deketeTodo", {
-        method: "DELETE",
+      await fetch("/api/deleteTodo", {
+        method: "Delete",
         body: JSON.stringify({ id }),
         headers: { "Content-Type": "application/json" },
       });
@@ -64,15 +67,24 @@ export const TodosProvider = ({ children }) => {
         return prevTodos.filter((todo) => todo.id !== id);
       });
     } catch (err) {
-      console.err(err);
+      console.error(err);
     }
   };
 
   return (
     <TodosContext.Provider
-      value={{ todos, setTodos, refreshTodos, updateTodo, deleteTodo, addTodo }}
+      value={{
+        todos,
+        setTodos,
+        refreshTodos,
+        updateTodo,
+        deleteTodo,
+        addTodo,
+      }}
     >
       {children}
     </TodosContext.Provider>
   );
 };
+
+export { TodosProvider, TodosContext };
