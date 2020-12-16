@@ -1,9 +1,8 @@
+import ownsRecord from "./middleware/OwnsRecord";
 import { table } from "./utils/airtable";
-import auth0 from "./utils/auth0";
 
-export default auth0.requireAuthentication(async (req, res) => {
+export default ownsRecord(async (req, res) => {
   const { id } = req.body;
-  const { user } = await auth0.getSession(req);
 
   try {
     const deletedRecord = await table.destroy([id]);

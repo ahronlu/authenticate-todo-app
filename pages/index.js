@@ -22,7 +22,7 @@ export default function Home({ initialTodos, user }) {
       </Head>
       <main>
         <Navbar user={user} />
-        {user && (
+        {user ? (
           <>
             <h1 className="text-2xl text-center mb-4">My Todos</h1>
             <TodoForm />
@@ -30,6 +30,8 @@ export default function Home({ initialTodos, user }) {
               {todos && todos.map((todo) => <Todo todo={todo} key={todo.id} />)}
             </ul>
           </>
+        ) : (
+          <p>You should log in to save your TODOs</p>
         )}
       </main>
     </div>
