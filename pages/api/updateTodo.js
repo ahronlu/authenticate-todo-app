@@ -1,4 +1,4 @@
-import { table, getMinifiedRecord } from "./utils/Airtable";
+import { table, getMinifiedRecord } from "./utils/airtable";
 
 export default async (req, res) => {
   const { id, fields } = req.body;
